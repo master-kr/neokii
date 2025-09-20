@@ -743,13 +743,13 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   },
 
   EventName.doorOpen: {
-    #ET.SOFT_DISABLE: user_soft_disable_alert("Door Open"),
-    #ET.NO_ENTRY: NoEntryAlert("Door Open"),
+    ET.SOFT_DISABLE: user_soft_disable_alert("Door Open"),
+    ET.NO_ENTRY: NoEntryAlert("Door Open"),
   },
 
   EventName.seatbeltNotLatched: {
-    #ET.SOFT_DISABLE: user_soft_disable_alert("Seatbelt Unlatched"),
-    #ET.NO_ENTRY: NoEntryAlert("Seatbelt Unlatched"),
+    ET.SOFT_DISABLE: user_soft_disable_alert("Seatbelt Unlatched"),
+    ET.NO_ENTRY: NoEntryAlert("Seatbelt Unlatched"),
   },
 
   EventName.espDisabled: {
