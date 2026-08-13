@@ -539,6 +539,18 @@ CommunityPanel::CommunityPanel(SettingsWindow *parent) : ListWidget(parent) {
       tr("If SCC is on bus 2, turn it on."),
       "../assets/offroad/icon_road.png",
     },
+    {
+      "CanfdHDA2",
+      tr("CAN-FD HDA2 mode"),
+      tr("Enable for Hyundai/Kia CAN-FD HDA2 vehicles when automatic detection through the external red panda fails."),
+      "../assets/offroad/icon_road.png",
+    },
+    {
+      "HyundaiCameraSCC",
+      tr("Hyundai Camera SCC / modified harness"),
+      tr("Use the carrot-compatible CAN-FD bus order for a camera-SCC or modified red panda harness."),
+      "../assets/offroad/icon_road.png",
+    },
 
     {
       "CruiseStateControl",

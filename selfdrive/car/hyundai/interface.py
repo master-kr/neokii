@@ -53,13 +53,24 @@ class CarInterface(CarInterfaceBase):
     # FIXME: the Optima Hybrid 2017 uses a different SCC12 checksum
     ret.dashcamOnly = candidate in {CAR.KIA_OPTIMA_H, }
 
-    hda2 = Ecu.adas in [fw.ecu for fw in car_fw] or candidate in CANFD_HDA2_CAR
+    params = Params()
+    # Keep CAN-FD wiring selections compatible with carrot/c3-wip. Firmware
+    # queries can fail when the vehicle bus is reached through an external red
+    # panda, so also use its persisted settings and camera-bus fingerprints.
+    canfd_hda2 = int(params.get("CanfdHDA2") or b"0") > 0
+    hyundai_camera_scc = int(params.get("HyundaiCameraSCC") or b"0") > 0
+    camera_bus = CanBus(None, False, fingerprint).CAM
+    hda2 = canfd_hda2 or Ecu.adas in [fw.ecu for fw in car_fw] or candidate in CANFD_HDA2_CAR \
+      or 0x50 in fingerprint[camera_bus] or 0x110 in fingerprint[camera_bus]
     CAN = CanBus(None, hda2, fingerprint)
 
     if candidate in CANFD_CAR:
+      if hyundai_camera_scc:
+        ret.flags |= HyundaiFlags.CANFD_CAMERA_SCC.value
       # detect HDA2 with ADAS Driving ECU
       if hda2:
-        if 0x110 in fingerprint[CAN.CAM]:
+        steering_bus = CAN.ACAN if hyundai_camera_scc else CAN.CAM
+        if 0x110 in fingerprint[steering_bus]:
           ret.flags |= HyundaiFlags.CANFD_HDA2_ALT_STEERING.value
         if candidate in CANFD_HDA2_ALT_GEARS:
           ret.flags |= HyundaiFlags.CANFD_ALT_GEARS.value

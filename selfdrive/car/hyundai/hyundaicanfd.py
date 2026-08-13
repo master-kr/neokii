@@ -1,4 +1,5 @@
 from openpilot.common.numpy_fast import clip
+from openpilot.common.params import Params
 from openpilot.selfdrive.car import CanBusBase
 from openpilot.selfdrive.car.hyundai.values import HyundaiFlags
 
@@ -15,7 +16,9 @@ class CanBus(CanBusBase):
     # have a different harness than the HDA1 and non-HDA variants in order to split
     # a different bus, since the steering is done by different ECUs.
     self._a, self._e = 1, 0
-    if hda2:
+    # Match carrot/c3-wip's bus order for camera-SCC/modified harness setups.
+    camera_scc = int(Params().get("HyundaiCameraSCC") or b"0") > 0
+    if hda2 and not camera_scc:
       self._a, self._e = 0, 1
 
     self._a += self.offset
